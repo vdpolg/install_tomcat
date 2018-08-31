@@ -1,0 +1,23 @@
+#!/bin/bash
+#名稱                   版本    日期            作者    備註
+#測試檔      v1.2    20180831        arthur  web 和ap 拆成2個shell
+
+WRK_PATH=$PWD #工作路徑
+DAT=$(date +%Y%m%d-%H%M%S) #timestamp 暫時用不到
+TOMC="apache-tomcat-8.0.53.tar.gz" #tomcat 安裝檔
+TOM="$(echo $TOMC | sed s/.tar.gz//)" #tomcat 目錄名稱
+# 多站台設定(最多3組站台)
+APName=$1       # 站台名稱
+APCount=$2      # 站台序號 0~2
+
+#if [[ $# != 2 ]] || [[ $APCount != \[0-2\] ]]; then  #1 check APName and AP_NO
+
+if [[ $# != 2 ]] ; then  #1 check APName and AP_NO
+	echo "error var not 2"
+	exit 1
+elif [[ $APCount != 0 ]] && [[ $APCount != 1 ]] && [[ $APCount != 2 ]] ;then
+	echo "error APCount must 0-2"
+else
+	echo OK!
+fi
+
