@@ -44,7 +44,7 @@ fi
 		cd /opt/apache-tomcat
 
 #		搬移tomcat 和複製檔案
-		mv conf/ webapps/ temp/ logs/ work/ -t /ap/tomcat_ui/
+		mv conf/ webapps/ temp/ work/ -t /ap/tomcat_ui/
 
 #第二台才會用到	cp -pr /ap/tomcat_ui/* /ap/tomcat_cm/
 		chown -R proap:proap /ap/tomcat_ui
@@ -52,12 +52,11 @@ fi
 #		建log的soft link
 		if [[ -d /log/tomcat_ui ]] ; then
 		echo -en "==logs folder 已存在," ; sleep 1 
-		echo -e "故不搬log== \n"
+		echo -e "故/ap/tomcat_ui/logs 維持不變== \n"
 		else
-		mkdir -p /log ; mv /ap/tomcat_ui/logs /log/tomcat_ui
+		mkdir -p /log/tomcat_ui
 		ln -sf /log/tomcat_ui /ap/tomcat_ui/logs
 		fi
-
 		chown -R proap:proap /log/tomcat_ui
                 rm -rf /opt/$TOMC
                 echo -e "==Tomcat install Success!== \n"
