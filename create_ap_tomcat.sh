@@ -9,7 +9,7 @@ TOM="$(echo $TOMC | sed s/.tar.gz//)" #tomcat 目錄名稱
 # 多站台設定(最多3組站台)
 APName=$1	# 站台名稱
 APCount=$2	# 站台序號 0~2
-function var2(){ #變數只能2個且序號介於0~2
+function var2(){ #最多能建立3個站台,序號0~2
   echo "請輸入<站台名稱>及<站台序號> 0~2"
   echo "Usage command --> : $0 <ap name> <0~2>"
   echo -e "安裝中止！ \n"

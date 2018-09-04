@@ -8,5 +8,6 @@ Test:	test
                v1.1	20180830        arthur  全新改款 tomcat_ui
                v1.2	20180831        arthur  強化重複安裝檢核
                v1.3	20180901        arthur  web ap 拆開，ap 多站台防呆
-						待辦：web、各項啟動shell
+               v1.4	20180904        		web 改為純安裝
+						待辦：各項啟動shell,文件
 </pre>
