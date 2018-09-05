@@ -1,30 +1,29 @@
 #!/bin/sh
 
 if [ $LOGNAME != "proap" ]
-	then
-	        echo "Please use user \"proap\" to execute."
-			        exit 0
-					fi
+then
+        echo "Please use user \"proap\" to execute."
+        exit 0
+fi
 
-					export CATALINA_HOME=/opt/apache-tomcat
-					export CATALINA_BASE=${1%/}
+export CATALINA_HOME=/opt/apache-tomcat
+export CATALINA_BASE=${1%/}
 
-					echo $CATALINA_BASE
+echo $CATALINA_BASE
 
-					TOMCAT_ID=`ps aux |grep "java"|grep "Dcatalina.base=$CATALINA_BASE "|grep -v "grep"|awk '{ print $2}'`
+TOMCAT_ID=`ps aux |grep "java"|grep "[D]catalina.base=$CATALINA_BASE "|awk '{ print $2}'`
 
+if [ -n "$TOMCAT_ID" ] ; then
+TOMCAT_STOP_LOG=`$CATALINA_HOME/bin/shutdown.sh`
+else
+    echo "Tomcat instance not found : ${1%/}"
+    exit
+fi
 
-					if [ -n "$TOMCAT_ID" ] ; then
-						echo "tomcat(${TOMCAT_ITOMCAT_ID}) still running now , please shutdown it firest";
-						    exit 2;
-							fi
-
-							TOMCAT_START_LOG=`$CATALINA_HOME/bin/startup.sh`
-
-							if [ "$?" = "0" ]; then
-								    echo "$0 ${1%/} start succeed"
-									else
-										    echo "$0 ${1%/} start failed"
-											    echo $TOMCAT_START_LOG
-												fi
+if [ "$?" = "0" ]; then
+    echo "$0 ${1%/} stop succeeded"
+else
+    echo "$0 ${1%/} stop failed"
+    echo $TOMCAT_STOP_LOG
+fi
 

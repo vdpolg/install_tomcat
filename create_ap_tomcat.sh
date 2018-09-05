@@ -28,6 +28,7 @@ echo "/ap/bin/stop_tomcat.sh /ap/${APName}" > /ap/bin/stop_${APName}.sh
 mv /ap/bin/show_ui.sh /ap/bin/show_${APName}.sh
 cd /ap/bin ;sed -i "s/AP-NAME/${APName}/g" /ap/bin/show_${APName}.sh
 chmod u+x start_${APName}.sh stop_${APName}.sh
+chown proap:proap start_${APName}.sh stop_${APName}.sh
 }
 #=================新增shell=========END=========="
 
@@ -101,9 +102,9 @@ done
    echo -e "待確認後再執行，離開安裝程式! \n"
    exit 1 ;;
 esac
-	  if [[ -d /log/${APName} ]] ; then #4 建log的soft link
-	    echo -en "==logs folder 已存在," ; sleep 1
-	    echo -e "故/ap/${APName}/logs 維持不變== \n"
+	if [[ -L /log/${APName}/logs ]] ; then #4 建log的soft link
+        echo -en "==log link  已存在," ; sleep 1
+        echo -e "故/ap/${APName}/logs 維持不變== \n"
 	  else #4
 	    mkdir -p /log/${APName}
 	    ln -sf /log/${APName} /ap/${APName}/logs
@@ -132,6 +133,7 @@ if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並
 		echo "shell已存在，繼續新增站台shell" ;sleep 2	
 		cd $WRK_PATH
 		cp show_ui.sh /ap/bin/
+		chown proap:proap /ap/bin/show_ui.sh
 		MTS # Modify TomCat Shell function
 	else
 		echo -e "已有重複站台名稱${APName}，安裝中止！"
