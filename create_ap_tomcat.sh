@@ -9,12 +9,27 @@ TOM="$(echo $TOMC | sed s/.tar.gz//)" #tomcat 目錄名稱
 # 多站台設定(最多3組站台)
 APName=$1	# 站台名稱
 APCount=$2	# 站台序號 0~2
+
 function var2(){ #最多能建立3個站台,序號0~2
   echo "請輸入<站台名稱>及<站台序號> 0~2"
   echo "Usage command --> : $0 <ap name> <0~2>"
   echo -e "安裝中止！ \n"
   exit 1
 }
+#=================新增shell=========START========"
+function CTS(){ # Copy Tomcat Shell
+cd $WRK_PATH
+cp start_tomcat.sh stop_tomcat.sh show_ui.sh /ap/bin/
+}
+function MTS(){ # Modify Tomcat Shell
+cd $WRK_PATH
+echo "/ap/bin/start_tomcat.sh /ap/${APName}" > /ap/bin/start_${APName}.sh
+echo "/ap/bin/stop_tomcat.sh /ap/${APName}" > /ap/bin/stop_${APName}.sh
+mv /ap/bin/show_ui.sh /ap/bin/show_${APName}.sh
+cd /ap/bin ;sed -i "s/AP-NAME/${APName}/g" /ap/bin/show_${APName}.sh
+chmod u+x start_${APName}.sh stop_${APName}.sh
+}
+#=================新增shell=========END=========="
 
 if [[ $# != 2 ]] ; then  #1 check 變數只能2個
 var2
@@ -107,11 +122,21 @@ esac
   
 fi #1 check APName and AP_NO
 
+if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並修改
+	echo
+		mkdir -p /ap/bin
+		CTS # Copy TomCat Shell function
+		MTS # Modify TomCat Shell function
+		chown -R proap:proap /ap/bin
+	elif [ ! -f /ap/bin/start_${APName}.sh ] ;then #若已存在就新增站台shell
+		echo "shell已存在，繼續新增站台shell" ;sleep 2	
+		cd $WRK_PATH
+		cp show_ui.sh /ap/bin/
+		MTS # Modify TomCat Shell function
+	else
+		echo -e "已有重複站台名稱${APName}，安裝中止！"
+		exit 1
+		fi
+
 echo -e "==============  Install Success!  ===============\n"
 exit 0
-#剩文件step7 ......
-
-#安裝JavaJDK
-#cd /soures/software
-#rpm -ivh jdk-7u79-linux-x64.rpm
-#java -version
