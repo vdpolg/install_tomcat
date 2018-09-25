@@ -21,7 +21,7 @@ else
 fi
 
 if [ "$?" = "0" ]; then
-    echo "$0 ${1%/} stop succeed"
+    echo "$0 ${1%/} stop succeess !"
 else
     echo "$0 ${1%/} stop failed"
     echo $TOMCAT_STOP_LOG

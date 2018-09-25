@@ -11,19 +11,20 @@ export CATALINA_BASE=${1%/}
 
 echo $CATALINA_BASE
 
-TOMCAT_ID=`ps aux |grep "java"|grep "[D]catalina.base=$CATALINA_BASE "|awk '{ print $2}'`
+TOMCAT_ID=`ps aux |grep "java"|grep "Dcatalina.base=$CATALINA_BASE "|grep -v "grep"|awk '{ print $2}'`
+
 
 if [ -n "$TOMCAT_ID" ] ; then
-TOMCAT_STOP_LOG=`$CATALINA_HOME/bin/shutdown.sh`
-else
-    echo "Tomcat instance not found : ${1%/}"
-    exit
+echo "tomcat(${TOMCAT_ITOMCAT_ID}) still running now , please shutdown it first";
+    exit 2;
 fi
 
+TOMCAT_START_LOG=`$CATALINA_HOME/bin/startup.sh`
+
 if [ "$?" = "0" ]; then
-    echo "$0 ${1%/} stop succeeded"
+    echo "$0 ${1%/} start success !"
 else
-    echo "$0 ${1%/} stop failed"
-    echo $TOMCAT_STOP_LOG
+    echo "$0 ${1%/} start failed"
+    echo $TOMCAT_START_LOG
 fi
 

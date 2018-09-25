@@ -1,6 +1,11 @@
 #!/bin/bash
 #名稱           	版本    日期            作者    備註
 #安裝AP tomcat站台	v1.2    20180831        arthur  web 和ap 拆成2個shell
+if [ $LOGNAME != "proap" ]
+then
+        echo "Please use user \"proap\" to execute."
+        exit 0
+fi
 
 WRK_PATH=$PWD #工作路徑
 DAT=$(date +%Y%m%d-%H%M%S) #timestamp 暫時用不到
@@ -19,15 +24,16 @@ function var2(){ #最多能建立3個站台,序號0~2
 #=================新增shell=========START========"
 function CTS(){ # Copy Tomcat Shell
 cd $WRK_PATH
-cp start_tomcat.sh stop_tomcat.sh show_ui.sh /ap/bin/
+cp start_tomcat.sh stop_tomcat.sh showui.sh /ap/bin/
 }
 function MTS(){ # Modify Tomcat Shell
 cd $WRK_PATH
 echo "/ap/bin/start_tomcat.sh /ap/${APName}" > /ap/bin/start_${APName}.sh
 echo "/ap/bin/stop_tomcat.sh /ap/${APName}" > /ap/bin/stop_${APName}.sh
-mv /ap/bin/show_ui.sh /ap/bin/show_${APName}.sh
+mv /ap/bin/showui.sh /ap/bin/show_${APName}.sh
 cd /ap/bin ;sed -i "s/AP-NAME/${APName}/g" /ap/bin/show_${APName}.sh
-chmod u+x start_${APName}.sh stop_${APName}.sh
+#chmod u+x start_${APName}.sh stop_${APName}.sh
+chmod u+x *.sh
 chown proap:proap start_${APName}.sh stop_${APName}.sh
 }
 #=================新增shell=========END=========="
@@ -124,7 +130,6 @@ esac
 fi #1 check APName and AP_NO
 
 if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並修改
-	echo
 		mkdir -p /ap/bin
 		CTS # Copy TomCat Shell function
 		MTS # Modify TomCat Shell function
@@ -132,8 +137,8 @@ if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並
 	elif [ ! -f /ap/bin/start_${APName}.sh ] ;then #若已存在就新增站台shell
 		echo "shell已存在，繼續新增站台shell" ;sleep 2	
 		cd $WRK_PATH
-		cp show_ui.sh /ap/bin/
-		chown proap:proap /ap/bin/show_ui.sh
+		cp showui.sh /ap/bin/
+		chown proap:proap /ap/bin/showui.sh
 		MTS # Modify TomCat Shell function
 	else
 		echo -e "已有重複站台名稱${APName}，安裝中止！"
