@@ -10,4 +10,5 @@ WEB:	install_tomcat.sh
                v1.4	20180904        	web 改為純安裝
 	       v1.5	20180905		新增tomcat service shell
 	       v1.6	20180925		fix ui & javajdk setting,測試服務下上OK
+	       v1.7	20180930		fix remove folder issue
 </pre>

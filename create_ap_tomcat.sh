@@ -1,6 +1,6 @@
 #!/bin/bash
 #名稱           	版本    日期            作者    備註
-#安裝AP tomcat站台	v1.2    20180831        arthur  web 和ap 拆成2個shell
+#安裝AP tomcat站台	v1.3    20180930        arthur  fix remove folder issue
 if [ $LOGNAME != "proap" ]
 then
         echo "Please use user \"proap\" to execute."
@@ -46,8 +46,7 @@ else #1
   echo -e "Installing" ;sleep 3
 
   if [[ -d `ls -d /opt/apache-tomcat` ]] 2> /dev/null ; then #2 若tomcat 存在就install 
-    cd /opt ;rm -rf apache-tomcat #清除舊檔
-    mkdir -p /opt/apache-tomcat #建立新目錄
+    cd /opt ;rm -rf apache-tomcat/* #清除舊檔
     echo -e '========安裝$(echo $TOMC | sed s/.tar.gz//)========= \n'
     sleep 1
     cd $WRK_PATH
@@ -135,7 +134,7 @@ if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並
 		MTS # Modify TomCat Shell function
 		chown -R proap:proap /ap/bin
 	elif [ ! -f /ap/bin/start_${APName}.sh ] ;then #若已存在就新增站台shell
-		echo "shell已存在，繼續新增站台shell" ;sleep 2	
+		echo "start_tomcat.sh已存在，新增其他shell" ;sleep 2	
 		cd $WRK_PATH
 		cp showui.sh /ap/bin/
 		chown proap:proap /ap/bin/showui.sh
@@ -147,3 +146,4 @@ if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並
 
 echo -e "==============  Install Success!  ===============\n"
 exit 0
+
