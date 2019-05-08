@@ -27,3 +27,8 @@ else
     echo $TOMCAT_STOP_LOG
 fi
 
+ck_tom=`ps -ef | grep $TOMCAT_ID | wc -l`
+if [ $ck_tom != 0 ] ; then
+kill -9 $TOMCAT_ID
+fi
+
