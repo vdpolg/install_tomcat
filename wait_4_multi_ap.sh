@@ -1,6 +1,7 @@
 #!/bin/bash
 #名稱           	版本    日期            作者    備註
 #安裝AP tomcat站台	v1.3    20180930        arthur  fix remove folder issue
+#			v1.4    20200530        	建構中，還不能用
 if [ $LOGNAME != "proap" ]
 then
         echo "Please use user \"proap\" to execute."

@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ $LOGNAME != "proap" ]
-then
-        echo "Please use user \"proap\" to execute."
-        exit 0
-fi
-
 export CATALINA_HOME=/opt/apache-tomcat
 export CATALINA_BASE=${1%/}
 
