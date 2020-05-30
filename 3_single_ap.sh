@@ -43,6 +43,7 @@ chmod g+x *.sh && chown :tomcat *.sh
 #=================新增shell=========END=========="
 
         cd /opt/apache-tomcat ; mv ./{conf,temp,work,webapps}  /ap/${TomcatWebName}/  # move tomcat檔案
+	rm -rf /opt/apache-tomcat/logs
 		
 	# server.xml port 設定 
 	Serv_P=8005
