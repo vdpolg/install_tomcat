@@ -37,7 +37,7 @@ fi
 
 EOF
 mv /ap/bin/showui.sh /ap/bin/show_${TomcatWebName}.sh
-cd /ap/bin ;sed -i "s/AP-NAME/${TomcatWebName}/g" /ap/bin/show_${TomcatWebName}.sh
+cd /ap/bin ;sed -i "s/\$WEBNAME/${TomcatWebName}/g" /ap/bin/show_${TomcatWebName}.sh
 chmod g+x *.sh && chown :tomcat *.sh
 }
 #=================新增shell=========END=========="

@@ -29,13 +29,13 @@ cp start_tomcat.sh stop_tomcat.sh showui.sh /ap/bin/
 }
 function MTS(){ # Modify Tomcat Shell
 cd $WRK_PATH
-echo "/ap/bin/start_tomcat.sh /ap/${APName}" > /ap/bin/start_${APName}.sh
-echo "/ap/bin/stop_tomcat.sh /ap/${APName}" > /ap/bin/stop_${APName}.sh
-mv /ap/bin/showui.sh /ap/bin/show_${APName}.sh
-cd /ap/bin ;sed -i "s/AP-NAME/${APName}/g" /ap/bin/show_${APName}.sh
-#chmod u+x start_${APName}.sh stop_${APName}.sh
+echo "/ap/bin/start_tomcat.sh /ap/${TomcatWebName}" > /ap/bin/start_${TomcatWebName}.sh
+echo "/ap/bin/stop_tomcat.sh /ap/${TomcatWebName}" > /ap/bin/stop_${TomcatWebName}.sh
+mv /ap/bin/showui.sh /ap/bin/show_${TomcatWebName}.sh
+cd /ap/bin ;sed -i "s/$WEBNAME/${TomcatWebName}/g" /ap/bin/show_${TomcatWebName}.sh
+#chmod u+x start_${TomcatWebName}.sh stop_${TomcatWebName}.sh
 chmod u+x *.sh
-chown proap:proap start_${APName}.sh stop_${APName}.sh
+chown proap:proap start_${TomcatWebName}.sh stop_${TomcatWebName}.sh
 }
 #=================新增shell=========END=========="
 
@@ -58,9 +58,9 @@ else #1
         tar zxvf $TOMC 
 	cd $TOM; cp -pr $(ls|egrep -v '(logs|webapps|work|conf|temp)') /opt/apache-tomcat
         chown -R proap:proap /opt/apache-tomcat 
-	mkdir -p /ap/${APName} #建AP目錄
-        cd $WRK_PATH ; cp -pr $TOM/{conf,temp,work,webapps} -t /ap/${APName}/  #複製tomcat檔案
-        chown -R proap:proap /ap/${APName}
+	mkdir -p /ap/${TomcatWebName} #建AP目錄
+        cd $WRK_PATH ; cp -pr $TOM/{conf,temp,work,webapps} -t /ap/${TomcatWebName}/  #複製tomcat檔案
+        chown -R proap:proap /ap/${TomcatWebName}
 	rm -rf $WRK_PATH/$TOM #裝完移除資料
 		
 	# server.xml port 設定 
@@ -69,7 +69,7 @@ else #1
 	AJP_P=8009
 	Redi_P=8443
 case $APCount in
-0)echo -e "\n ====  站台名稱：${APName} ，這是第${APCount}站台(預設值) ====\n"
+0)echo -e "\n ====  站台名稱：${TomcatWebName} ，這是第${APCount}站台(預設值) ====\n"
 echo    "================  Now port setting  =================="
 echo -e "================  Server_Port=$Serv_P  ================"
 echo -e "================  Connect_Port=$Conn_P  ==============="
@@ -77,10 +77,10 @@ echo -e "================  AJP_Port=$AJP_P  ==================="
 echo -e "================  Redirect_Port=$Redi_P  ==============\n"
 for G in $Serv_P $Conn_P $AJP_P $Redi_P 
 do
-grep --color=always $G /ap/${APName}/conf/server.xml
+grep --color=always $G /ap/${TomcatWebName}/conf/server.xml
 done
 ;;
-1)echo -e "\n ====  站台名稱：${APName} ，這是第${APCount}站台(預設port+10) ====\n"
+1)echo -e "\n ====  站台名稱：${TomcatWebName} ，這是第${APCount}站台(預設port+10) ====\n"
 echo    "================  Now port setting   =================="
 echo -e "================  Server_Port  =  `echo $Serv_P|awk '{print $1+10}'`  ==============="
 echo -e "================  Connect_Port =  `echo $Conn_P|awk '{print $1+10}'`  ==============="
@@ -88,11 +88,11 @@ echo -e "================  AJP_Port     =  `echo $AJP_P|awk '{print $1+10}'`  ==
 echo -e "================  Redirect_Port=  `echo $Redi_P|awk '{print $1+10}'`  ===============\n"
 for G in $Serv_P $Conn_P $AJP_P $Redi_P
 do
-sed -i s/$G/`echo $G |awk '{print $1+10}'`/g /ap/${APName}/conf/server.xml
-grep --color=always `echo $G |awk '{print $1+10}'` /ap/${APName}/conf/server.xml
+sed -i s/$G/`echo $G |awk '{print $1+10}'`/g /ap/${TomcatWebName}/conf/server.xml
+grep --color=always `echo $G |awk '{print $1+10}'` /ap/${TomcatWebName}/conf/server.xml
 done
 ;;
-2)echo -e "\n ====  站台名稱：${APName} ，這是第${APCount}站台(預設port+20) ====\n"
+2)echo -e "\n ====  站台名稱：${TomcatWebName} ，這是第${APCount}站台(預設port+20) ====\n"
 echo    "================  Now port setting   =================="
 echo -e "================  Server_Port  =  `echo $Serv_P|awk '{print $1+20}'`  ==============="
 echo -e "================  Connect_Port =  `echo $Conn_P|awk '{print $1+20}'`  ==============="
@@ -100,21 +100,21 @@ echo -e "================  AJP_Port     =  `echo $AJP_P|awk '{print $1+20}'`  ==
 echo -e "================  Redirect_Port=  `echo $Redi_P|awk '{print $1+20}'`  ===============\n"
 for G in $Serv_P $Conn_P $AJP_P $Redi_P
 do
-sed -i s/$G/`echo $G |awk '{print $1+20}'`/g /ap/${APName}/conf/server.xml
-grep --color=always `echo $G |awk '{print $1+20}'` /ap/${APName}/conf/server.xml
+sed -i s/$G/`echo $G |awk '{print $1+20}'`/g /ap/${TomcatWebName}/conf/server.xml
+grep --color=always `echo $G |awk '{print $1+20}'` /ap/${TomcatWebName}/conf/server.xml
 done
 ;;
 *) echo "請輸入站台序號(0~2)" # 有 var2 判斷，這邊應該用不到XD
    echo -e "待確認後再執行，離開安裝程式! \n"
    exit 1 ;;
 esac
-	if [[ -L /log/${APName}/logs ]] ; then #4 建log的soft link
+	if [[ -L /log/${TomcatWebName}/logs ]] ; then #4 建log的soft link
         echo -en "==log link  已存在," ; sleep 1
-        echo -e "故/ap/${APName}/logs 維持不變== \n"
+        echo -e "故/ap/${TomcatWebName}/logs 維持不變== \n"
 	  else #4
-	    mkdir -p /log/${APName}
-	    ln -sf /log/${APName} /ap/${APName}/logs
-	    chown -R proap:proap /log/${APName}
+	    mkdir -p /log/${TomcatWebName}
+	    ln -sf /log/${TomcatWebName} /ap/${TomcatWebName}/logs
+	    chown -R proap:proap /log/${TomcatWebName}
 	  fi #4	
 		
 	else #3 tomcat.tar.gz checksum
@@ -134,14 +134,14 @@ if [ ! -f /ap/bin/start_tomcat.sh ] ;then # 若start_tomcat不存在就新增並
 		CTS # Copy TomCat Shell function
 		MTS # Modify TomCat Shell function
 		chown -R proap:proap /ap/bin
-	elif [ ! -f /ap/bin/start_${APName}.sh ] ;then #若已存在就新增站台shell
+	elif [ ! -f /ap/bin/start_${TomcatWebName}.sh ] ;then #若已存在就新增站台shell
 		echo "start_tomcat.sh已存在，新增其他shell" ;sleep 2	
 		cd $WRK_PATH
 		cp showui.sh /ap/bin/
 		chown proap:proap /ap/bin/showui.sh
 		MTS # Modify TomCat Shell function
 	else
-		echo -e "已有重複站台名稱${APName}，安裝中止！"
+		echo -e "已有重複站台名稱${TomcatWebName}，安裝中止！"
 		exit 1
 		fi
 
